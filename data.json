@@ -1,0 +1,64 @@
+{
+  "categories": [
+    {
+      "name": "Science",
+      "questions": [
+        { "value": 200, "question": "This planet is known as the Red Planet", "answer": "What is Mars?" },
+        { "value": 400, "question": "This element has the chemical symbol 'O'", "answer": "What is Oxygen?" },
+        { "value": 600, "question": "This force keeps us on the ground", "answer": "What is gravity?" },
+        { "value": 800, "question": "This organ pumps blood through the body", "answer": "What is the heart?" },
+        { "value": 1000, "question": "This scientist developed the theory of relativity", "answer": "Who is Albert Einstein?" }
+      ]
+    },
+    {
+      "name": "History",
+      "questions": [
+        { "value": 200, "question": "This year the Declaration of Independence was signed", "answer": "What is 1776?" },
+        { "value": 400, "question": "This ancient civilization built the pyramids", "answer": "Who are the Egyptians?" },
+        { "value": 600, "question": "This wall fell in 1989", "answer": "What is the Berlin Wall?" },
+        { "value": 800, "question": "This explorer discovered America in 1492", "answer": "Who is Christopher Columbus?" },
+        { "value": 1000, "question": "This war lasted from 1914 to 1918", "answer": "What is World War I?" }
+      ]
+    },
+    {
+      "name": "Movies",
+      "questions": [
+        { "value": 200, "question": "This film features a shark terrorizing a beach town", "answer": "What is Jaws?" },
+        { "value": 400, "question": "This 1994 film follows a man on a bench telling his life story", "answer": "What is Forrest Gump?" },
+        { "value": 600, "question": "This trilogy features hobbits on a quest to destroy a ring", "answer": "What is Lord of the Rings?" },
+        { "value": 800, "question": "This Pixar film features toys that come to life", "answer": "What is Toy Story?" },
+        { "value": 1000, "question": "This film's famous line is 'Here's looking at you, kid'", "answer": "What is Casablanca?" }
+      ]
+    },
+    {
+      "name": "Geography",
+      "questions": [
+        { "value": 200, "question": "This is the largest ocean on Earth", "answer": "What is the Pacific Ocean?" },
+        { "value": 400, "question": "This country has the most people", "answer": "What is India?" },
+        { "value": 600, "question": "This is the longest river in the world", "answer": "What is the Nile?" },
+        { "value": 800, "question": "This desert is the largest hot desert", "answer": "What is the Sahara?" },
+        { "value": 1000, "question": "This mountain is the tallest in the world", "answer": "What is Mount Everest?" }
+      ]
+    },
+    {
+      "name": "Sports",
+      "questions": [
+        { "value": 200, "question": "This sport uses a puck", "answer": "What is hockey?" },
+        { "value": 400, "question": "This event is held every four years and features many sports", "answer": "What are the Olympics?" },
+        { "value": 600, "question": "This tennis Grand Slam is played on grass", "answer": "What is Wimbledon?" },
+        { "value": 800, "question": "This boxer was known as 'The Greatest'", "answer": "Who is Muhammad Ali?" },
+        { "value": 1000, "question": "This country has won the most FIFA World Cups", "answer": "What is Brazil?" }
+      ]
+    },
+    {
+      "name": "Food",
+      "questions": [
+        { "value": 200, "question": "This Italian dish is made with layers of pasta, sauce, and cheese", "answer": "What is lasagna?" },
+        { "value": 400, "question": "This fruit is known as the 'king of fruits' in Southeast Asia", "answer": "What is durian?" },
+        { "value": 600, "question": "This spice comes from the dried stigma of a crocus flower", "answer": "What is saffron?" },
+        { "value": 800, "question": "This Japanese dish features vinegared rice with raw fish", "answer": "What is sushi?" },
+        { "value": 1000, "question": "This French cooking term means 'everything in its place'", "answer": "What is mise en place?" }
+      ]
+    }
+  ]
+}

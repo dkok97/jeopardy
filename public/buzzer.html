@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Jeopardy Buzzer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app" class="buzzer-page"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+const socket = io();
+let state = {};
+let myTeam = null;
+let hasBuzzed = false;
+
+socket.on('state', (s) => {
+  const prevPhase = state.phase;
+  state = s;
+
+  // Reset buzz state when a new question starts
+  if (state.phase === 'question' && prevPhase !== 'question') {
+    hasBuzzed = false;
+  }
+
+  render();
+});
+
+function render() {
+  const app = document.getElementById('app');
+
+  if (!myTeam) {
+    renderTeamSelect(app);
+  } else {
+    renderBuzzer(app);
+  }
+}
+
+function renderTeamSelect(app) {
+  const teams = Object.keys(state.teams || {});
+  app.innerHTML = `
+    <h1>JEOPARDY!</h1>
+    <p>Select your team:</p>
+    <div class="team-buttons">
+      ${teams.length === 0 ? '<p style="color:#aaa">No teams yet. Ask the host to add teams.</p>' : ''}
+      ${teams.map(t => `
+        <button class="team-btn" onclick="joinTeam('${t.replace(/'/g, "\\'")}')">${esc(t)}</button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderBuzzer(app) {
+  const team = state.teams?.[myTeam];
+  const score = team ? team.score : 0;
+  const buzzerOpen = state.buzzerOpen;
+  const queue = state.buzzerQueue || [];
+  const myBuzz = queue.find(b => b.team === myTeam);
+  const firstBuzz = queue[0];
+
+  let statusText = '';
+  let btnClass = 'buzz-button';
+
+  if (state.phase === 'board' || state.phase === 'setup') {
+    statusText = 'Waiting for next question...';
+    btnClass += ' disabled';
+  } else if (hasBuzzed || myBuzz) {
+    statusText = firstBuzz?.team === myTeam ? "You're first!" : `Buzzed! (${firstBuzz ? firstBuzz.team + ' was first' : ''})`;
+    btnClass += ' buzzed';
+  } else if (buzzerOpen) {
+    statusText = 'BUZZ NOW!';
+  } else if (state.phase === 'answer') {
+    statusText = 'Buzzer locked';
+    btnClass += ' disabled';
+  } else {
+    statusText = 'Waiting...';
+    btnClass += ' disabled';
+  }
+
+  app.innerHTML = `
+    <h1>${esc(myTeam)}</h1>
+    <div class="buzzer-score">${formatScore(score)}</div>
+
+    <button class="${btnClass}" id="buzz-btn"
+            ontouchstart="buzz(event)" onclick="buzz(event)">
+      BUZZ
+    </button>
+
+    <div class="buzzer-status">${statusText}</div>
+
+    ${state.current ? `<p style="margin-top:20px;color:#ffcc00">$${state.current.value}</p>` : ''}
+
+    <button class="btn-gray" style="margin-top:40px;font-size:13px" onclick="myTeam=null;render()">
+      Change Team
+    </button>
+  `;
+}
+
+function joinTeam(name) {
+  myTeam = name;
+  socket.emit('join-team', name);
+  render();
+}
+
+function buzz(e) {
+  e.preventDefault();
+  if (!state.buzzerOpen || hasBuzzed) return;
+  hasBuzzed = true;
+  socket.emit('buzz');
+
+  // Vibrate for haptic feedback
+  if (navigator.vibrate) {
+    navigator.vibrate(100);
+  }
+
+  render();
+}
+
+function formatScore(n) {
+  return (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString();
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+  </script>
+</body>
+</html>

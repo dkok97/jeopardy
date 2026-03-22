@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeopardy!</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+const socket = io();
+let state = {};
+
+socket.on('state', (s) => {
+  state = s;
+  render();
+});
+
+function render() {
+  const app = document.getElementById('app');
+  if (state.phase === 'setup') {
+    renderSetup(app);
+  } else if (state.phase === 'board') {
+    renderBoard(app);
+  } else if (state.phase === 'question' || state.phase === 'answer') {
+    renderBoard(app);
+    renderOverlay();
+  }
+}
+
+function renderSetup(app) {
+  const teamNames = Object.keys(state.teams || {});
+  app.innerHTML = `
+    <div class="setup">
+      <h1>JEOPARDY!</h1>
+
+      <h2>Teams</h2>
+      <div class="team-row">
+        <input type="text" id="team-input" placeholder="Team name">
+        <button class="btn-gold" onclick="addTeam()">Add Team</button>
+      </div>
+      <div class="team-list">
+        ${teamNames.map(t => `<span class="team-tag">${esc(t)}</span>`).join('')}
+      </div>
+
+      <div style="margin-top:30px;text-align:center">
+        <button class="btn-gold" onclick="startGame()" style="font-size:20px;padding:14px 40px">
+          Start Game
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('team-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') addTeam();
+  });
+}
+
+function renderBoard(app) {
+  const cats = state.categories || [];
+  const teams = state.teams || {};
+  const numCats = cats.length;
+  const numQs = cats[0]?.questions?.length || 5;
+
+  app.innerHTML = `
+    <div class="board-container">
+      <div class="scoreboard">
+        ${Object.entries(teams).map(([name, t]) => `
+          <div class="score-card">
+            <div class="team-name">${esc(name)}</div>
+            <div class="team-score">${formatScore(t.score)}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="grid" style="grid-template-columns: repeat(${numCats}, 1fr)">
+        ${cats.map((c, ci) => `<div class="grid-header">${esc(c.name)}</div>`).join('')}
+        ${Array.from({length: numQs}, (_, vi) =>
+          cats.map((c, ci) => {
+            const q = c.questions[vi];
+            const key = `${ci}-${vi}`;
+            const done = state.done?.[key];
+            return `<div class="grid-cell ${done ? 'done' : ''}"
+                         onclick="${done ? '' : `selectQuestion(${ci},${vi})`}">
+              ${done ? '' : '$' + q.value}
+            </div>`;
+          }).join('')
+        ).join('')}
+      </div>
+      <div class="toolbar">
+        <input type="text" id="board-team-input" placeholder="Add team" style="padding:8px 12px;border:none;border-radius:4px;font-size:14px;background:#1a1a4e;color:#fff;width:150px">
+        <button class="btn-gold" onclick="addTeamFromBoard()" style="font-size:14px;padding:8px 14px">Add Team</button>
+        <button class="btn-gray" onclick="socket.emit('reset-game')">New Game</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderOverlay() {
+  const cur = state.current;
+  if (!cur) return;
+
+  let existing = document.getElementById('overlay');
+  if (!existing) {
+    existing = document.createElement('div');
+    existing.id = 'overlay';
+    existing.className = 'overlay';
+    document.body.appendChild(existing);
+  }
+
+  const queue = state.buzzerQueue || [];
+  const showAnswer = state.phase === 'answer';
+  const teams = Object.keys(state.teams || {});
+  const awarded = state.awarded;
+
+  existing.innerHTML = `
+    <div class="value-label">$${cur.value}</div>
+    <div class="question-text">${esc(cur.question)}</div>
+    ${showAnswer ? `<div class="answer-text">${esc(cur.answer)}</div>` : ''}
+    ${showAnswer && cur.answerMedia ? renderMedia(cur.answerMedia) : ''}
+
+    <div class="buzzer-queue">
+      ${queue.length === 0 ? '<span style="color:#6a7a8a">Waiting for buzzes...</span>' : ''}
+      ${queue.map((b, i) => `<div class="${i === 0 ? 'first' : ''}">${i === 0 ? '>> ' : ''}${esc(b.team)}</div>`).join('')}
+    </div>
+
+    <div class="controls">
+      ${!showAnswer ? `<button class="btn-gold" onclick="socket.emit('show-answer')">Show Answer</button>` : ''}
+      ${showAnswer && !awarded ? `
+        <div class="team-award-grid">
+          ${teams.map(t => `
+            <div class="team-award-row">
+              <span class="team-award-name">${esc(t)}</span>
+              <button class="btn-green" onclick="award('${escAttr(t)}', true)">+$${cur.value}</button>
+              <button class="btn-red" onclick="award('${escAttr(t)}', false)">-$${cur.value}</button>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      ${awarded ? '<span style="color:#2ecc40;font-size:1.1rem;padding:10px">Points awarded</span>' : ''}
+      <button class="btn-gray" onclick="closeQuestion()">Back to Board</button>
+    </div>
+  `;
+}
+
+function renderMedia(media) {
+  // media: { type: "image"|"video"|"audio", src: "/assets/..." }
+  if (!media || !media.type || !media.src) return '';
+  if (media.type === 'image') {
+    return `<div class="answer-media"><img src="${escAttr(media.src)}" alt="answer"></div>`;
+  }
+  if (media.type === 'video') {
+    return `<div class="answer-media"><video src="${escAttr(media.src)}" controls autoplay></video></div>`;
+  }
+  if (media.type === 'audio') {
+    return `<div class="answer-media"><audio src="${escAttr(media.src)}" controls autoplay></audio></div>`;
+  }
+  return '';
+}
+
+function addTeam() {
+  const input = document.getElementById('team-input');
+  const name = input.value.trim();
+  if (name) {
+    socket.emit('add-team', name);
+    input.value = '';
+  }
+}
+
+function startGame() {
+  socket.emit('start-game');
+}
+
+function addTeamFromBoard() {
+  const input = document.getElementById('board-team-input');
+  const name = input.value.trim();
+  if (name) {
+    socket.emit('add-team', name);
+    input.value = '';
+  }
+}
+
+function selectQuestion(ci, vi) {
+  socket.emit('select-question', { catIndex: ci, valIndex: vi });
+}
+
+function award(team, correct) {
+  socket.emit('award-points', { team, correct });
+}
+
+function closeQuestion() {
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.remove();
+  socket.emit('close-question');
+}
+
+function formatScore(n) {
+  return (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString();
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function escAttr(s) {
+  return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+  </script>
+</body>
+</html>

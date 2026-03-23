@@ -133,7 +133,11 @@ function renderOverlay() {
   existing.innerHTML = `
     <div class="value-label">$${cur.value}</div>
     <div class="question-text">${esc(cur.question)}</div>
-    ${cur.questionMedia ? renderMedia(cur.questionMedia) : ''}
+    ${cur.questionMedia && cur.questionMedia.type === 'reveal-image'
+      ? (showAnswer
+        ? `<div class="answer-media"><img src="${escAttr(cur.questionMedia.src)}" alt="answer"></div>`
+        : `<div class="answer-media"><img src="${escAttr(cur.questionMedia.coveredSrc)}" alt="question"></div>`)
+      : (cur.questionMedia ? renderMedia(cur.questionMedia) : '')}
     ${cur.type === 'fill-in-blank' && cur.blankAnswer ? renderBlankAnswer(cur.blankAnswer, state.revealedLetters || 0, showAnswer) : ''}
     ${showAnswer ? `<div class="answer-text">${esc(cur.answer)}</div>` : ''}
     ${showAnswer && cur.answerMedia ? renderMedia(cur.answerMedia) : ''}

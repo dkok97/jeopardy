@@ -276,11 +276,36 @@
         {
           "name": "Years of Sharon",
           "questions": [
-            { "value": 200, "question": "TBD", "answer": "TBD" },
-            { "value": 400, "question": "TBD", "answer": "TBD" },
-            { "value": 600, "question": "TBD", "answer": "TBD" },
-            { "value": 800, "question": "TBD", "answer": "TBD" },
-            { "value": 1000, "question": "TBD", "answer": "TBD" }
+            {
+              "value": 200,
+              "question": "What year is this photo from?",
+              "questionMedia": { "type": "image", "src": "/assets/20162sharon.png" },
+              "answer": "What is 2016?"
+            },
+            {
+              "value": 400,
+              "question": "What year is this photo from?",
+              "questionMedia": { "type": "image", "src": "/assets/2020sharon.png" },
+              "answer": "What is 2020?"
+            },
+            {
+              "value": 600,
+              "question": "What year is this photo from?",
+              "questionMedia": { "type": "image", "src": "/assets/2024sharon.png" },
+              "answer": "What is 2024?"
+            },
+            {
+              "value": 800,
+              "question": "What year is this photo from?",
+              "questionMedia": { "type": "image", "src": "/assets/2016sharon.png" },
+              "answer": "What is 2016?"
+            },
+            {
+              "value": 1000,
+              "question": "What year is this photo from?",
+              "questionMedia": { "type": "image", "src": "/assets/2015sharon.png" },
+              "answer": "What is 2015?"
+            }
           ]
         }
       ]

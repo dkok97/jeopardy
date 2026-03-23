@@ -33,7 +33,7 @@ let game = {
   current: null,   // { catIndex, valIndex, question, answer, answerMedia, value }
   buzzerQueue: [], // [{ team, time }]
   buzzerOpen: false,
-  awarded: false,  // true once points have been awarded for current question
+  awardedTeams: {},  // { teamName: true } — tracks which teams got points this question
 };
 
 // --- REST endpoints ---
@@ -89,8 +89,8 @@ io.on('connection', (socket) => {
     const key = `${catIndex}-${valIndex}`;
     if (game.done[key]) return;
 
-    game.current = { catIndex, valIndex, question: q.question, answer: q.answer, answerMedia: q.answerMedia || null, value: q.value };
-    game.awarded = false;
+    game.current = { catIndex, valIndex, question: q.question, answer: q.answer, questionMedia: q.questionMedia || null, answerMedia: q.answerMedia || null, value: q.value };
+    game.awardedTeams = {};
     game.phase = 'question';
     game.buzzerQueue = [];
     game.buzzerOpen = true;
@@ -113,12 +113,12 @@ io.on('connection', (socket) => {
     io.emit('state', game);
   });
 
-  // Host awards points (positive or negative) — once per question
+  // Host awards points (positive or negative) — per team per question
   socket.on('award-points', ({ team, correct }) => {
-    if (!game.current || !game.teams[team] || game.awarded) return;
+    if (!game.current || !game.teams[team] || game.awardedTeams[team]) return;
     const pts = game.current.value;
     game.teams[team].score += correct ? pts : -pts;
-    game.awarded = true;
+    game.awardedTeams[team] = true;
     io.emit('state', game);
   });
 

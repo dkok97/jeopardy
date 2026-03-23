@@ -113,33 +113,34 @@ function renderOverlay() {
   const queue = state.buzzerQueue || [];
   const showAnswer = state.phase === 'answer';
   const teams = Object.keys(state.teams || {});
-  const awarded = state.awarded;
+  const awardedTeams = state.awardedTeams || {};
 
   existing.innerHTML = `
     <div class="value-label">$${cur.value}</div>
     <div class="question-text">${esc(cur.question)}</div>
+    ${cur.questionMedia ? renderMedia(cur.questionMedia) : ''}
     ${showAnswer ? `<div class="answer-text">${esc(cur.answer)}</div>` : ''}
     ${showAnswer && cur.answerMedia ? renderMedia(cur.answerMedia) : ''}
 
     <div class="buzzer-queue">
-      ${queue.length === 0 ? '<span style="color:#6a7a8a">Waiting for buzzes...</span>' : ''}
+      ${queue.length === 0 && !showAnswer ? '<span style="color:#6a7a8a">Waiting for buzzes...</span>' : ''}
       ${queue.map((b, i) => `<div class="${i === 0 ? 'first' : ''}">${i === 0 ? '>> ' : ''}${esc(b.team)}</div>`).join('')}
     </div>
 
     <div class="controls">
       ${!showAnswer ? `<button class="btn-gold" onclick="socket.emit('show-answer')">Show Answer</button>` : ''}
-      ${showAnswer && !awarded ? `
-        <div class="team-award-grid">
-          ${teams.map(t => `
-            <div class="team-award-row">
-              <span class="team-award-name">${esc(t)}</span>
-              <button class="btn-green" onclick="award('${escAttr(t)}', true)">+$${cur.value}</button>
-              <button class="btn-red" onclick="award('${escAttr(t)}', false)">-$${cur.value}</button>
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-      ${awarded ? '<span style="color:#2ecc40;font-size:1.1rem;padding:10px">Points awarded</span>' : ''}
+      <div class="team-award-grid">
+        ${teams.map(t => `
+          <div class="team-award-row">
+            <span class="team-award-name">${esc(t)}</span>
+            ${awardedTeams[t]
+              ? '<span style="color:#2ecc40;font-size:0.9rem">Awarded</span>'
+              : `<button class="btn-green" onclick="award('${escAttr(t)}', true)">+$${cur.value}</button>
+                 <button class="btn-red" onclick="award('${escAttr(t)}', false)">-$${cur.value}</button>`
+            }
+          </div>
+        `).join('')}
+      </div>
       <button class="btn-gray" onclick="closeQuestion()">Back to Board</button>
     </div>
   `;

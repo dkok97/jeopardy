@@ -65,8 +65,15 @@ function renderBoard(app) {
   const numCats = cats.length;
   const numQs = cats[0]?.questions?.length || 5;
 
+  // Check if all questions in this round are done
+  const totalQs = numCats * numQs;
+  const doneCount = Object.keys(state.done || {}).length;
+  const allDone = totalQs > 0 && doneCount >= totalQs;
+  const hasNextRound = (state.round + 1) < state.totalRounds;
+
   app.innerHTML = `
     <div class="board-container">
+      <div style="text-align:center;color:#ffcc00;font-size:1.2rem;padding:6px 0">${esc(state.roundName || '')}</div>
       <div class="scoreboard">
         ${Object.entries(teams).map(([name, t]) => `
           <div class="score-card">
@@ -89,6 +96,13 @@ function renderBoard(app) {
           }).join('')
         ).join('')}
       </div>
+      ${allDone && hasNextRound ? `
+        <div style="text-align:center;margin-top:20px">
+          <button class="btn-gold" onclick="socket.emit('next-round')" style="font-size:22px;padding:16px 50px">
+            Next Round
+          </button>
+        </div>
+      ` : ''}
       <div class="toolbar">
         <input type="text" id="board-team-input" placeholder="Add team" style="padding:8px 12px;border:none;border-radius:4px;font-size:14px;background:#1a1a4e;color:#fff;width:150px">
         <button class="btn-gold" onclick="addTeamFromBoard()" style="font-size:14px;padding:8px 14px">Add Team</button>

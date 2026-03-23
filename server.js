@@ -27,6 +27,9 @@ const gameData = loadGameData();
 // Game state
 let game = {
   phase: 'setup', // setup | board | question | answer
+  round: 0,       // current round index
+  totalRounds: 0,  // total number of rounds
+  roundName: '',
   categories: [],
   teams: {},       // { teamName: { score: 0, members: 0 } }
   done: {},        // { "cat-val": true }
@@ -52,9 +55,29 @@ io.on('connection', (socket) => {
   // Send current state on connect
   socket.emit('state', game);
 
-  // Host starts game — loads categories from data.json
+  // Host starts game — loads round 1 from data.json
   socket.on('start-game', () => {
-    game.categories = gameData.categories;
+    const rounds = gameData.rounds || [{ name: 'Round 1', categories: gameData.categories || [] }];
+    game.round = 0;
+    game.totalRounds = rounds.length;
+    game.roundName = rounds[0].name;
+    game.categories = rounds[0].categories;
+    game.phase = 'board';
+    game.done = {};
+    game.current = null;
+    game.buzzerQueue = [];
+    game.buzzerOpen = false;
+    io.emit('state', game);
+  });
+
+  // Host advances to next round
+  socket.on('next-round', () => {
+    const rounds = gameData.rounds || [{ name: 'Round 1', categories: gameData.categories || [] }];
+    const nextRound = game.round + 1;
+    if (nextRound >= rounds.length) return;
+    game.round = nextRound;
+    game.roundName = rounds[nextRound].name;
+    game.categories = rounds[nextRound].categories;
     game.phase = 'board';
     game.done = {};
     game.current = null;

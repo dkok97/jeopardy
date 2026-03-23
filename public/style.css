@@ -153,6 +153,17 @@ button:disabled { opacity: 0.4; cursor: default; }
   line-height: 1.4;
   margin-bottom: 30px;
 }
+.overlay .blank-answer {
+  font-size: 2.5rem;
+  color: #fff;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 6px;
+  margin-bottom: 20px;
+  background: rgba(0,0,0,0.3);
+  padding: 16px 24px;
+  border-radius: 8px;
+}
 .overlay .answer-text {
   font-size: 2rem;
   color: #ffcc00;

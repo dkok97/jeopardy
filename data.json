@@ -174,23 +174,83 @@
       "name": "Round 2",
       "categories": [
         {
-          "name": "UCLA nom nom",
+          "name": "UCLA noms",
           "questions": [
-            { "value": 200, "question": "TBD", "answer": "TBD" },
-            { "value": 400, "question": "TBD", "answer": "TBD" },
-            { "value": 600, "question": "TBD", "answer": "TBD" },
-            { "value": 800, "question": "TBD", "answer": "TBD" },
-            { "value": 1000, "question": "TBD", "answer": "TBD" }
+            {
+              "value": 200,
+              "question": "Name this UCLA dining spot!",
+              "questionMedia": { "type": "image", "src": "/assets/rendezvous.PNG" },
+              "answer": "What is Rendezvous?"
+            },
+            {
+              "value": 400,
+              "question": "Name this UCLA dining spot!",
+              "questionMedia": { "type": "image", "src": "/assets/feast.PNG" },
+              "answer": "What is Feast?"
+            },
+            {
+              "value": 600,
+              "question": "Name this UCLA dining spot!",
+              "questionMedia": { "type": "image", "src": "/assets/thestudy.PNG" },
+              "answer": "What is The Study?"
+            },
+            {
+              "value": 800,
+              "question": "Name this UCLA dining spot!",
+              "questionMedia": { "type": "image", "src": "/assets/bplate.PNG" },
+              "answer": "What is Bruin Plate?"
+            },
+            {
+              "value": 1000,
+              "question": "Name this UCLA dining spot!",
+              "questionMedia": { "type": "image", "src": "/assets/covel.PNG" },
+              "answer": "What is Covel?"
+            }
           ]
         },
         {
           "name": "The Great Wall of Sharu",
           "questions": [
-            { "value": 200, "question": "TBD", "answer": "TBD" },
-            { "value": 400, "question": "TBD", "answer": "TBD" },
-            { "value": 600, "question": "TBD", "answer": "TBD" },
-            { "value": 800, "question": "TBD", "answer": "TBD" },
-            { "value": 1000, "question": "TBD", "answer": "TBD" }
+            {
+              "value": 200,
+              "question": "Fill in the blank!",
+              "questionMedia": { "type": "image", "src": "/assets/wall-yinyang.jpg" },
+              "type": "fill-in-blank",
+              "blankAnswer": "YIN AND YANG",
+              "answer": "Conservatism and liberalism are the real YIN AND YANG"
+            },
+            {
+              "value": 400,
+              "question": "Fill in the blank!",
+              "questionMedia": { "type": "image", "src": "/assets/wall-kony.jpg" },
+              "type": "fill-in-blank",
+              "blankAnswer": "retard",
+              "answer": "Kony's gotta be the biggest RETARD ever."
+            },
+            {
+              "value": 600,
+              "question": "Fill in the blank!",
+              "questionMedia": { "type": "image", "src": "/assets/wall-tabletop.jpg" },
+              "type": "fill-in-blank",
+              "blankAnswer": "top of the table",
+              "answer": "Cause we're gonna go on TOP OF THE TABLE!!!"
+            },
+            {
+              "value": 800,
+              "question": "Fill in the blank!",
+              "questionMedia": { "type": "image", "src": "/assets/wall-sniper.jpg" },
+              "type": "fill-in-blank",
+              "blankAnswer": "i missed you",
+              "answer": "Answer: I MISSED YOU xD"
+            },
+            {
+              "value": 1000,
+              "question": "Fill in the blank!",
+              "questionMedia": { "type": "image", "src": "/assets/wall-selfie.PNG" },
+              "type": "fill-in-blank",
+              "blankAnswer": "god bless my soul",
+              "answer": "Trying hard to look good in a selfie. god bless my soul"
+            }
           ]
         },
         {

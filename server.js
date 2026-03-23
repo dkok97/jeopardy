@@ -112,7 +112,8 @@ io.on('connection', (socket) => {
     const key = `${catIndex}-${valIndex}`;
     if (game.done[key]) return;
 
-    game.current = { catIndex, valIndex, question: q.question, answer: q.answer, questionMedia: q.questionMedia || null, answerMedia: q.answerMedia || null, value: q.value };
+    game.current = { catIndex, valIndex, question: q.question, answer: q.answer, questionMedia: q.questionMedia || null, answerMedia: q.answerMedia || null, value: q.value, type: q.type || null, blankAnswer: q.blankAnswer || null };
+    game.revealedLetters = 0;
     game.awardedTeams = {};
     game.phase = 'question';
     game.buzzerQueue = [];
@@ -127,6 +128,16 @@ io.on('connection', (socket) => {
     if (game.buzzerQueue.some(b => b.team === socket.team)) return;
     game.buzzerQueue.push({ team: socket.team, time: Date.now() });
     io.emit('state', game);
+  });
+
+  // Host reveals a letter in fill-in-blank questions
+  socket.on('reveal-letter', () => {
+    if (!game.current || game.current.type !== 'fill-in-blank' || !game.current.blankAnswer) return;
+    const letters = game.current.blankAnswer.replace(/[^a-zA-Z0-9]/g, '').length;
+    if (game.revealedLetters < letters) {
+      game.revealedLetters++;
+      io.emit('state', game);
+    }
   });
 
   // Host shows answer

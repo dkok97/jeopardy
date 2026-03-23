@@ -107,6 +107,7 @@ function renderBoard(app) {
         <input type="text" id="board-team-input" placeholder="Add team" style="padding:8px 12px;border:none;border-radius:4px;font-size:14px;background:#1a1a4e;color:#fff;width:150px">
         <button class="btn-gold" onclick="addTeamFromBoard()" style="font-size:14px;padding:8px 14px">Add Team</button>
         <button class="btn-gray" onclick="socket.emit('reset-game')">New Game</button>
+        ${hasNextRound ? `<button class="btn-gold" onclick="socket.emit('next-round')" style="font-size:14px;padding:8px 14px">Skip to Next Round</button>` : ''}
       </div>
     </div>
   `;
@@ -133,6 +134,7 @@ function renderOverlay() {
     <div class="value-label">$${cur.value}</div>
     <div class="question-text">${esc(cur.question)}</div>
     ${cur.questionMedia ? renderMedia(cur.questionMedia) : ''}
+    ${cur.type === 'fill-in-blank' && cur.blankAnswer ? renderBlankAnswer(cur.blankAnswer, state.revealedLetters || 0, showAnswer) : ''}
     ${showAnswer ? `<div class="answer-text">${esc(cur.answer)}</div>` : ''}
     ${showAnswer && cur.answerMedia ? renderMedia(cur.answerMedia) : ''}
 
@@ -142,6 +144,7 @@ function renderOverlay() {
     </div>
 
     <div class="controls">
+      ${!showAnswer && cur.type === 'fill-in-blank' ? `<button class="btn-gold" onclick="socket.emit('reveal-letter')">Reveal Letter</button>` : ''}
       ${!showAnswer ? `<button class="btn-gold" onclick="socket.emit('show-answer')">Show Answer</button>` : ''}
       <div class="team-award-grid">
         ${teams.map(t => `
@@ -158,6 +161,26 @@ function renderOverlay() {
       <button class="btn-gray" onclick="closeQuestion()">Back to Board</button>
     </div>
   `;
+}
+
+function renderBlankAnswer(blankAnswer, revealedCount, showAnswer) {
+  if (showAnswer) return '';
+  // Reveal letters one at a time (only counting alphanumeric chars)
+  let letterIndex = 0;
+  let display = '';
+  for (const ch of blankAnswer) {
+    if (/[a-zA-Z0-9]/.test(ch)) {
+      if (letterIndex < revealedCount) {
+        display += ch;
+      } else {
+        display += '_';
+      }
+      letterIndex++;
+    } else {
+      display += ch; // spaces and punctuation always shown
+    }
+  }
+  return `<div class="blank-answer">${esc(display)}</div>`;
 }
 
 function renderMedia(media) {

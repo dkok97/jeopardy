@@ -256,21 +256,71 @@
         {
           "name": "Insta Famous",
           "questions": [
-            { "value": 200, "question": "TBD", "answer": "TBD" },
-            { "value": 400, "question": "TBD", "answer": "TBD" },
-            { "value": 600, "question": "TBD", "answer": "TBD" },
-            { "value": 800, "question": "TBD", "answer": "TBD" },
-            { "value": 1000, "question": "TBD", "answer": "TBD" }
+            {
+              "value": 200,
+              "question": "What does the caption say?",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/insta5-covered.jpg", "src": "/assets/insta5.jpg" },
+              "answer": "-"
+            },
+            {
+              "value": 400,
+              "question": "What does the caption say?",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/insta3-covered.jpg", "src": "/assets/insta3.jpg" },
+              "answer": "-"
+            },
+            {
+              "value": 600,
+              "question": "What does the caption say?",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/insta1-covered.jpg", "src": "/assets/insta1.jpg" },
+              "answer": "-"
+            },
+            {
+              "value": 800,
+              "question": "What does the caption say?",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/insta2-covered.jpg", "src": "/assets/insta2.jpg" },
+              "answer": "-"
+            },
+            {
+              "value": 1000,
+              "question": "What does the caption say?",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/insta4-covered.jpg", "src": "/assets/insta4.jpg" },
+              "answer": "-"
+            }
           ]
         },
         {
           "name": "Guess Who",
           "questions": [
-            { "value": 200, "question": "TBD", "answer": "TBD" },
-            { "value": 400, "question": "TBD", "answer": "TBD" },
-            { "value": 600, "question": "TBD", "answer": "TBD" },
-            { "value": 800, "question": "TBD", "answer": "TBD" },
-            { "value": 1000, "question": "TBD", "answer": "TBD" }
+            {
+              "value": 200,
+              "question": "Guess who",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess1-covered.jpg", "src": "/assets/guess1.jpg" },
+              "answer": "Who is Ashwin"
+            },
+            {
+              "value": 400,
+              "question": "Guess who",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess2-covered.jpg", "src": "/assets/guess2.jpg" },
+              "answer": "Who is Sam"
+            },
+            {
+              "value": 600,
+              "question": "Guess who",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess3-covered.jpg", "src": "/assets/guess3.jpg" },
+              "answer": "Who is Taasin"
+            },
+            {
+              "value": 800,
+              "question": "Guess who",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess4-covered.jpg", "src": "/assets/guess4.jpg" },
+              "answer": "Who is Aaron"
+            },
+            {
+              "value": 1000,
+              "question": "Guess who",
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess5-covered.jpg", "src": "/assets/guess5.jpg" },
+              "answer": "Who is Aashita"
+            }
           ]
         },
         {
@@ -291,8 +341,8 @@
             {
               "value": 600,
               "question": "What year is this photo from?",
-              "questionMedia": { "type": "image", "src": "/assets/2024sharon.png" },
-              "answer": "What is 2024?"
+              "questionMedia": { "type": "image", "src": "/assets/2019sharon.png" },
+              "answer": "What is 2019?"
             },
             {
               "value": 800,

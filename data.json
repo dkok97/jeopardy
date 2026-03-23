@@ -312,7 +312,7 @@
             {
               "value": 800,
               "question": "Guess who",
-              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess4-covered.jpg", "src": "/assets/guess4.jpg" },
+              "questionMedia": { "type": "reveal-image", "coveredSrc": "/assets/guess4-covered.jpeg", "src": "/assets/guess4.jpeg" },
               "answer": "Who is Aaron"
             },
             {

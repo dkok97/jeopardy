@@ -96,6 +96,41 @@
       ]
     },
     {
+      "name": "Years of Nidhi",
+      "questions": [
+        {
+          "value": 200,
+          "question": "What year is this photo from?",
+          "questionMedia": { "type": "image", "src": "/assets/nid2013.PNG" },
+          "answer": "What is 2013?"
+        },
+        {
+          "value": 400,
+          "question": "What year is this photo from?",
+          "questionMedia": { "type": "image", "src": "/assets/2014nid.PNG" },
+          "answer": "What is 2014?"
+        },
+        {
+          "value": 600,
+          "question": "What year is this photo from?",
+          "questionMedia": { "type": "image", "src": "/assets/IMG_9151.PNG" },
+          "answer": "What is 2016?"
+        },
+        {
+          "value": 800,
+          "question": "What year is this photo from?",
+          "questionMedia": { "type": "image", "src": "/assets/2017nid.PNG" },
+          "answer": "What is 2017?"
+        },
+        {
+          "value": 1000,
+          "question": "What year is this photo from?",
+          "questionMedia": { "type": "image", "src": "/assets/IMG_9154.PNG" },
+          "answer": "What is 2020?"
+        }
+      ]
+    },
+    {
       "name": "Music",
       "questions": [
         {
